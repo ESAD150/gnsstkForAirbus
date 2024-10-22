@@ -7,25 +7,25 @@
 
 //==============================================================================
 //
-//  This file is part of GNSSTk, the ARL:UT GNSS Toolkit.
+//  This file is part of GPSTk, the GPS Toolkit.
 //
-//  The GNSSTk is free software; you can redistribute it and/or modify
+//  The GPSTk is free software; you can redistribute it and/or modify
 //  it under the terms of the GNU Lesser General Public License as published
 //  by the Free Software Foundation; either version 3.0 of the License, or
 //  any later version.
 //
-//  The GNSSTk is distributed in the hope that it will be useful,
+//  The GPSTk is distributed in the hope that it will be useful,
 //  but WITHOUT ANY WARRANTY; without even the implied warranty of
 //  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 //  GNU Lesser General Public License for more details.
 //
 //  You should have received a copy of the GNU Lesser General Public
-//  License along with GNSSTk; if not, write to the Free Software Foundation,
+//  License along with GPSTk; if not, write to the Free Software Foundation,
 //  Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110, USA
-//
+//  
 //  This software was developed by Applied Research Laboratories at the
 //  University of Texas at Austin.
-//  Copyright 2004-2022, The Board of Regents of The University of Texas System
+//  Copyright 2004-2020, The Board of Regents of The University of Texas System
 //
 //==============================================================================
 
@@ -36,20 +36,20 @@
 //  within the U.S. Department of Defense. The U.S. Government retains all
 //  rights to use, duplicate, distribute, disclose, or release this software.
 //
-//  Pursuant to DoD Directive 523024
+//  Pursuant to DoD Directive 523024 
 //
-//  DISTRIBUTION STATEMENT A: This software has been approved for public
+//  DISTRIBUTION STATEMENT A: This software has been approved for public 
 //                            release, distribution is unlimited.
 //
 //==============================================================================
 
-#ifndef GNSSTK_TRACKINGCODE_HPP
-#define GNSSTK_TRACKINGCODE_HPP
+#ifndef GPSTK_TRACKINGCODE_HPP
+#define GPSTK_TRACKINGCODE_HPP
 
 #include <string>
 #include "EnumIterator.hpp"
 
-namespace gnsstk
+namespace gpstk
 {
       /** The code used to collect the observation. Each of these
        * should uniquely identify a code that was correlated
@@ -184,6 +184,8 @@ namespace gnsstk
       RSSDP,        ///< IRNSS S-band B+C
       CW,           ///< Continuous Wave, i.e. no chipping sequence
       Undefined,    ///< Code is known to be undefined (as opposed to unknown)
+      Sqm_I,        ///<Added>: Tracking code for attribute I if not defined in OBS ICD
+      Sqm_Q,        ///<Added>: Tracking code for attribute Q if not defined in OBS ICD
       Last,         ///< Used to verify that all items are described at compile time
    }; // enum class TrackingCode
 
@@ -194,10 +196,10 @@ namespace gnsstk
    namespace StringUtils
    {
          /// Convert a TrackingCode to a whitespace-free string name.
-      std::string asString(TrackingCode e) noexcept;
+      std::string asString(TrackingCode e) throw();
          /// Convert a string name to an TrackingCode
-      TrackingCode asTrackingCode(const std::string& s) noexcept;
+      TrackingCode asTrackingCode(const std::string& s) throw();
    }
-} // namespace gnsstk
+} // namespace gpstk
 
-#endif // GNSSTK_TRACKINGCODE_HPP
+#endif // GPSTK_TRACKINGCODE_HPP

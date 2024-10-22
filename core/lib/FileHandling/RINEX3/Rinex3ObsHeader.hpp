@@ -1,24 +1,24 @@
 //==============================================================================
 //
-//  This file is part of GNSSTk, the ARL:UT GNSS Toolkit.
+//  This file is part of GPSTk, the GPS Toolkit.
 //
-//  The GNSSTk is free software; you can redistribute it and/or modify
+//  The GPSTk is free software; you can redistribute it and/or modify
 //  it under the terms of the GNU Lesser General Public License as published
 //  by the Free Software Foundation; either version 3.0 of the License, or
 //  any later version.
 //
-//  The GNSSTk is distributed in the hope that it will be useful,
+//  The GPSTk is distributed in the hope that it will be useful,
 //  but WITHOUT ANY WARRANTY; without even the implied warranty of
 //  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 //  GNU Lesser General Public License for more details.
 //
 //  You should have received a copy of the GNU Lesser General Public
-//  License along with GNSSTk; if not, write to the Free Software Foundation,
+//  License along with GPSTk; if not, write to the Free Software Foundation,
 //  Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110, USA
-//
+//  
 //  This software was developed by Applied Research Laboratories at the
 //  University of Texas at Austin.
-//  Copyright 2004-2022, The Board of Regents of The University of Texas System
+//  Copyright 2004-2020, The Board of Regents of The University of Texas System
 //
 //==============================================================================
 
@@ -29,9 +29,9 @@
 //  within the U.S. Department of Defense. The U.S. Government retains all
 //  rights to use, duplicate, distribute, disclose, or release this software.
 //
-//  Pursuant to DoD Directive 523024
+//  Pursuant to DoD Directive 523024 
 //
-//  DISTRIBUTION STATEMENT A: This software has been approved for public
+//  DISTRIBUTION STATEMENT A: This software has been approved for public 
 //                            release, distribution is unlimited.
 //
 //==============================================================================
@@ -41,8 +41,8 @@
  * Encapsulate header of Rinex observation file, including I/O
  */
 
-#ifndef GNSSTK_RINEX3OBSHEADER_HPP
-#define GNSSTK_RINEX3OBSHEADER_HPP
+#ifndef GPSTK_RINEX3OBSHEADER_HPP
+#define GPSTK_RINEX3OBSHEADER_HPP
 
 #include <vector>
 #include <list>
@@ -51,17 +51,15 @@
 #include <iostream>
 #include <iomanip>
 
-#include "gnsstk_export.h"
 #include "CivilTime.hpp"
 #include "FFStream.hpp"
 #include "Rinex3ObsBase.hpp"
 #include "Triple.hpp"
 #include "RinexSatID.hpp"
 #include "RinexObsID.hpp"
-#include "XmitAnt.hpp"
 
 
-namespace gnsstk
+namespace gpstk
 {
 
       /// @ingroup FileHandling
@@ -140,7 +138,7 @@ namespace gnsstk
 
       /**
        * This class models the header for a RINEX 3 Observation File.
-       * @sa gnsstk::Rinex3ObsData and gnsstk::Rinex3ObsStream.
+       * @sa gpstk::Rinex3ObsData and gpstk::Rinex3ObsStream.
        * @sa rinex_obs_test.cpp and rinex_obs_read_write.cpp for examples.
        *
        * RINEX 2 is also supported.
@@ -159,86 +157,52 @@ namespace gnsstk
          /// A Simple Constructor.
       Rinex3ObsHeader();
 
+      /*-- Define constructor and variable for SQM management --*/
+      bool _bIsPossiblySqm = false;
+      Rinex3ObsHeader(bool bIsPossiblySqm);
+      /*-- End of SQM management --*/
+
          /** Clear (empty out) header, setting all data members to
           * default values */
       void clear();
 
          /// @name RINEX observation file header formatting strings
          ///@{
-      GNSSTK_EXPORT
       static const std::string hsVersion;           ///< RINEX VERSION / TYPE
-      GNSSTK_EXPORT
       static const std::string hsRunBy;             ///< PGM / RUN BY / DATE
-      GNSSTK_EXPORT
       static const std::string hsComment;           ///< COMMENT
-      GNSSTK_EXPORT
       static const std::string hsMarkerName;        ///< MARKER NAME
-      GNSSTK_EXPORT
       static const std::string hsMarkerNumber;      ///< MARKER NUMBER
-      GNSSTK_EXPORT
       static const std::string hsMarkerType;        ///< MARKER TYPE
-      GNSSTK_EXPORT
       static const std::string hsObserver;          ///< OBSERVER / AGENCY
-      GNSSTK_EXPORT
       static const std::string hsReceiver;          ///< REC # / TYPE / VERS
-      GNSSTK_EXPORT
       static const std::string hsAntennaType;       ///< ANT # / TYPE
-      GNSSTK_EXPORT
       static const std::string hsAntennaPosition;   ///< APPROX POSITION XYZ
-      GNSSTK_EXPORT
       static const std::string hsAntennaDeltaHEN;   ///< ANTENNA: DELTA H/E/N
-      GNSSTK_EXPORT
       static const std::string hsAntennaDeltaXYZ;   ///< ANTENNA: DELTA X/Y/Z
-      GNSSTK_EXPORT
       static const std::string hsAntennaPhaseCtr;   ///< ANTENNA: PHASECENTER
-      GNSSTK_EXPORT
       static const std::string hsAntennaBsightXYZ;  ///< ANTENNA: B.SIGHT XYZ
-      GNSSTK_EXPORT
       static const std::string hsAntennaZeroDirAzi; ///< ANTENNA: ZERODIR AZI
-      GNSSTK_EXPORT
       static const std::string hsAntennaZeroDirXYZ; ///< ANTENNA: ZERODIR XYZ
-      GNSSTK_EXPORT
       static const std::string hsCenterOfMass;      ///< CENTER OF MASS: XYZ
-      GNSSTK_EXPORT
       static const std::string hsNumObs;            ///< # / TYPES OF OBSERV
-      GNSSTK_EXPORT
       static const std::string hsSystemNumObs;      ///< SYS / # / OBS TYPES
-      GNSSTK_EXPORT
       static const std::string hsWaveFact;          ///< WAVELENGTH FACT L1/2
-      GNSSTK_EXPORT
       static const std::string hsSigStrengthUnit;   ///< SIGNAL STRENGTH UNIT
-      GNSSTK_EXPORT
       static const std::string hsInterval;          ///< INTERVAL
-      GNSSTK_EXPORT
       static const std::string hsFirstTime;         ///< TIME OF FIRST OBS
-      GNSSTK_EXPORT
       static const std::string hsLastTime;          ///< TIME OF LAST OBS
-      GNSSTK_EXPORT
       static const std::string hsReceiverOffset;    ///< RCV CLOCK OFFS APPL
-      GNSSTK_EXPORT
       static const std::string hsSystemDCBSapplied; ///< SYS / DCBS APPLIED
-      GNSSTK_EXPORT
       static const std::string hsSystemPCVSapplied; ///< SYS / PCVS APPLIED
-      GNSSTK_EXPORT
       static const std::string hsSystemScaleFac;    ///< SYS / SCALE FACTOR
-      GNSSTK_EXPORT
       static const std::string hsSystemPhaseShift;  ///< SYS / PHASE SHIFT
-      GNSSTK_EXPORT
       static const std::string hsGlonassSlotFreqNo; ///< GLONASS SLOT / FRQ #
-      GNSSTK_EXPORT
       static const std::string hsGlonassCodPhsBias; ///< GLONASS COD/PHS/BIS
-      GNSSTK_EXPORT
       static const std::string hsLeapSeconds;       ///< LEAP SECONDS
-      GNSSTK_EXPORT
       static const std::string hsNumSats;           ///< # OF SATELLITES
-      GNSSTK_EXPORT
       static const std::string hsPrnObs;            ///< PRN / # OF OBS
-      GNSSTK_EXPORT
       static const std::string hsEoH;               ///< END OF HEADER
-      GNSSTK_EXPORT
-      static const std::string hsAntennaStandard;   ///< Fixed comment xmit ant
-      GNSSTK_EXPORT
-      static const std::string hsAntennaRegional;   ///< Fixed comment xmit ant
          ///@}
 
          /** Validity bits for the RINEX Observation Header - please
@@ -283,7 +247,7 @@ namespace gnsstk
          validPrnObs,                         ///< PRN / # OF OBS
          validLast                            ///< Used for testing only.
       };
-
+   
          /** RINEX 3 DCBS/PCVS info (for differential code bias and
           * phase center variations corr.) */
       class Rinex3CorrInfo
@@ -362,18 +326,10 @@ namespace gnsstk
       typedef std::vector<ExtraWaveFact> FactorVector;
       typedef std::set<Field> FieldSet;
 
-         /** This class encapsulates a collection of RINEX 3 OBS
-          * header field flags.  It is only used to keep track of the
-          * presence of a field, but not the field values themselves,
-          * which are contained within Rinex3ObsHeader. */
       class Fields
       {
       public:
-            /// Only implicit constructors to do.
          Fields() = default;
-            /** Construct a Fields class from a set of Field.
-             * @param[in] fields The set of fields to populate this object with.
-             */
          Fields(const FieldSet& fields)
                : fieldsSet(fields)
          {}
@@ -460,7 +416,6 @@ namespace gnsstk
          FieldSet fieldsSet;
       };
 
-      GNSSTK_EXPORT
       static const Fields allValid2, allValid30, allValid301, allValid302,
          allValid303;
 
@@ -483,7 +438,7 @@ namespace gnsstk
          /// file sys char: RinexSatID system OR Mixed
       std::string fileSys;
          /** If false, the file type and system will be re-generated
-          * in the gnsstk preferred format when writing the header,
+          * in the gpstk preferred format when writing the header,
           * otherwise the strings fileType fileSys will be written
           * unaltered */
       bool preserveVerType;
@@ -506,16 +461,16 @@ namespace gnsstk
       std::string recVers;             ///< receiver version
       std::string antNo;               ///< antenna number
       std::string antType;             ///< antenna type
-      gnsstk::Triple antennaPosition;   ///< APPROX POSITION XYZ
-      gnsstk::Triple antennaDeltaHEN;   ///< ANTENNA: DELTA H/E/N
-      gnsstk::Triple antennaDeltaXYZ;   ///< ANTENNA: DELTA X/Y/Z
+      gpstk::Triple antennaPosition;   ///< APPROX POSITION XYZ
+      gpstk::Triple antennaDeltaHEN;   ///< ANTENNA: DELTA H/E/N
+      gpstk::Triple antennaDeltaXYZ;   ///< ANTENNA: DELTA X/Y/Z
       std::string antennaSatSys;       ///< ANTENNA P.CTR BLOCK: SAT SYS
       std::string antennaObsCode;      ///< ANTENNA P.CTR BLOCK: OBS CODE
-      gnsstk::Triple antennaPhaseCtr;   ///< ANTENNA P.CTR BLOCK: PCTR POS
-      gnsstk::Triple antennaBsightXYZ;  ///< ANTENNA B.SIGHT XYZ
+      gpstk::Triple antennaPhaseCtr;   ///< ANTENNA P.CTR BLOCK: PCTR POS
+      gpstk::Triple antennaBsightXYZ;  ///< ANTENNA B.SIGHT XYZ
       double        antennaZeroDirAzi; ///< ANTENNA ZERODIR AZI
-      gnsstk::Triple antennaZeroDirXYZ; ///< ANTENNA ZERODIR XYZ
-      gnsstk::Triple centerOfMass;      ///< vehicle CENTER OF MASS: XYZ
+      gpstk::Triple antennaZeroDirXYZ; ///< ANTENNA ZERODIR XYZ
+      gpstk::Triple centerOfMass;      ///< vehicle CENTER OF MASS: XYZ
       RinexObsMap mapObsTypes;         ///< SYS / # / OBS TYPES
       short wavelengthFactor[2];       ///< WAVELENGTH FACT (system-wide)
       FactorVector extraWaveFactList;  ///< WAVELENGTH FACT (per SV)
@@ -534,7 +489,6 @@ namespace gnsstk
       short numSVs;                    ///< # OF SATELLITES
       PRNNumObsMap numObsForSat;       ///< PRN / # OF OBS
 
-      XmitAnt xmitAnt;                 ///< Non-standard, transmitter ID.
 
          /// number & types of observations R2 only
          ///@bug  this is being used but is not actually being filled
@@ -548,7 +502,7 @@ namespace gnsstk
       bool PisY;
 
          /// Used to help debug this class
-      GNSSTK_EXPORT static int debug;
+      static int debug;
 
          /// Destructor
       virtual ~Rinex3ObsHeader()
@@ -567,7 +521,7 @@ namespace gnsstk
           */
       virtual void dump(std::ostream& s) const
       { dump(s, version); }
-
+         
          /** This is a debug output function which provides a lot of
           * detail about the header contents for a specified RINEX
           * format version.
@@ -596,14 +550,14 @@ namespace gnsstk
 
          /** Parse a single header record, and modify valid
           * accordingly.  Used by reallyGetRecord for both
-          * Rinex3ObsHeader and Rinex3ObsData.
+          * Rinex3ObsHeader and Rinex3ObsData. 
           * @throw FFStreamError
           */
       void parseHeaderRecord(std::string& line);
 
          /** Compute number of valid header records that
           * writeHeaderRecords() will write */
-      int numberHeaderRecordsToBeWritten(void) const noexcept;
+      int numberHeaderRecordsToBeWritten(void) const throw();
 
          /** Write all valid header records to the given stream.  Used
           * by reallyPutRecord for both Rinex3ObsHeader and
@@ -679,7 +633,7 @@ namespace gnsstk
 
          /** Helper methods
           * The conversion between RINEX v2.11 to RINEX v3 observation
-          * type is fraught with system-specific idiosyncracies.   These
+          * type is fraught with system-specific idiosyncracies.   These 
           * methods read the list of v2.11 obs types stored in R2ObsTypes
           * and attempt to build a corresponding list of v3 observation
           * types where appropriate.
@@ -733,4 +687,4 @@ namespace gnsstk
 
 } // namespace
 
-#endif // GNSSTK_RINEX3OBSHEADER_HPP
+#endif // GPSTK_RINEX3OBSHEADER_HPP

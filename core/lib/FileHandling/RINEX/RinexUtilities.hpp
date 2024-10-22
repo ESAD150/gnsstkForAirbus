@@ -1,24 +1,24 @@
 //==============================================================================
 //
-//  This file is part of GNSSTk, the ARL:UT GNSS Toolkit.
+//  This file is part of GPSTk, the GPS Toolkit.
 //
-//  The GNSSTk is free software; you can redistribute it and/or modify
+//  The GPSTk is free software; you can redistribute it and/or modify
 //  it under the terms of the GNU Lesser General Public License as published
 //  by the Free Software Foundation; either version 3.0 of the License, or
 //  any later version.
 //
-//  The GNSSTk is distributed in the hope that it will be useful,
+//  The GPSTk is distributed in the hope that it will be useful,
 //  but WITHOUT ANY WARRANTY; without even the implied warranty of
 //  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 //  GNU Lesser General Public License for more details.
 //
 //  You should have received a copy of the GNU Lesser General Public
-//  License along with GNSSTk; if not, write to the Free Software Foundation,
+//  License along with GPSTk; if not, write to the Free Software Foundation,
 //  Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110, USA
-//
+//  
 //  This software was developed by Applied Research Laboratories at the
 //  University of Texas at Austin.
-//  Copyright 2004-2022, The Board of Regents of The University of Texas System
+//  Copyright 2004-2020, The Board of Regents of The University of Texas System
 //
 //==============================================================================
 
@@ -29,9 +29,9 @@
 //  within the U.S. Department of Defense. The U.S. Government retains all
 //  rights to use, duplicate, distribute, disclose, or release this software.
 //
-//  Pursuant to DoD Directive 523024
+//  Pursuant to DoD Directive 523024 
 //
-//  DISTRIBUTION STATEMENT A: This software has been approved for public
+//  DISTRIBUTION STATEMENT A: This software has been approved for public 
 //                            release, distribution is unlimited.
 //
 //==============================================================================
@@ -39,14 +39,18 @@
 /// @file RinexUtilities.hpp
 /// Miscellaneous RINEX-related utilities.
 
-#ifndef GNSSTK_RINEX_UTILITIES_INCLUDE
-#define GNSSTK_RINEX_UTILITIES_INCLUDE
+#ifndef GPSTK_RINEX_UTILITIES_INCLUDE
+#define GPSTK_RINEX_UTILITIES_INCLUDE
 
 // system includes
 #include <string>
 #include <vector>
 
-namespace gnsstk
+// GPSTk
+#include "GPSEphemerisStore.hpp"
+#include "SP3EphemerisStore.hpp"
+
+namespace gpstk
 {
       /// @ingroup FileHandling
       //@{
@@ -87,8 +91,9 @@ namespace gnsstk
       /// Determine if the given file is a RINEX 3 observation file.
       /// Open the file, read the header, and test its validity.
       /// @param file the filename
+      /// @param If the file can be an SQM file
       /// @return true if the file is a valid Rinex observation file.
-   bool isRinex3ObsFile(const std::string& file);
+   bool isRinex3ObsFile(const std::string& file, bool bIsPossiblySqm = false);
 
       /** Sort a vector of RINEX obs file names on the time of the
        * first observation as found in the header. Return the sorted
@@ -110,9 +115,19 @@ namespace gnsstk
       /// @return string containing error messages, if any
    std::string sortRinex3ObsFiles(std::vector<std::string>& files);
 
+      /// Open the files and add to the appropriate EphemerisStore.
+      /// @param files vector of the filenames.
+      /// @param PE an SP3EphemerisStore into which to put SP3 ephemeris data.
+      /// @param BCE a GPSEphemerisStore into which to put broadcast
+      ///    (Rinex Nav) ephemeris data.
+      /// @return the number of files successfully read.
+   int FillEphemerisStore(const std::vector<std::string>& files,
+                          gpstk::SP3EphemerisStore& PE,
+                          gpstk::GPSEphemerisStore& BCE);
+
       //@}
 
-} // end namespace gnsstk
+} // end namespace gpstk
 
 #endif
 
